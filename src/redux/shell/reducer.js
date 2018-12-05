@@ -1,10 +1,14 @@
 import {TOP_LEFT_MENU_ICON_CLICK , LEFT_MENU_DISMISS, 
-        ALAKI,UPDATE_SERVICES,UPDATE_USER_INFO} from "./action";
+        UPDATE_SERVICES, UPDATE_INSTANCES,
+        UPDATE_USER_INFO} from "./action";
 
 const defaultState = {
   lefMenuVisible:false,
-  alaki:1,
-  servicesList:[]
+  servicesList:[],
+  instancesList:[],
+  userInfo:{},
+  access_token:null,
+  id_token:null,
 };
 
 const shell = (state = defaultState, action) => {
@@ -22,22 +26,24 @@ const shell = (state = defaultState, action) => {
         lefMenuVisible: false
       };
 
-      case ALAKI:
-      return {
-        ...state,
-        alaki: 5
-      };
-
       case UPDATE_SERVICES:
       return {
         ...state,
         servicesList:action.servicesList
       };
 
+      case UPDATE_INSTANCES:
+      return {
+        ...state,
+        instancesList:action.instancesList
+      };
+
       case UPDATE_USER_INFO:
       return {
         ...state,
-        userInfo:action.userInfo
+        userInfo:action.userInfo,
+        access_token:action.access_token,
+        id_token:action.id_token
       };
     
     default:
