@@ -35,13 +35,7 @@ class Shell extends Component {
 
   }
 
- /* componentDidUpdate(prevProps) {
-    if (this.props.access_token !== prevProps.access_token) {
-      this.fetchData(this.props.userID);
-    }
-    
-   console.log("GGGG",prevProps)
-  }*/
+ 
 
   servicesReceivedCallback = (response)=>{
     console.log(response)
@@ -53,6 +47,8 @@ class Shell extends Component {
     this.props.updateStateWithInstances(response.Items);  
   }
 
+ 
+
   render() {
 
     console.log(this.state)
@@ -62,18 +58,46 @@ class Shell extends Component {
             <ShellAppbar handleTopLeftMenuClick = {this.props.handleTopLeftMenuClick}/>
             <ShellDrawer dismissDrawer = {this.props.dismissDrawer} 
                          visible = {this.props.lefMenuVisibleProp}
-                         servicesList = {this.props.servicesListProp}/>
+                         combinedLists = {this.props.combinedListsProp}/>
           </div>      
     );
   }
 
 }
 
-const mapStateToProps = state => {  
-  console.log(state)
+
+const combineLists = (servicesList,instancesList) =>{
+
+  console.log("COMBINED ", servicesList,instancesList);
+
+
+  for(let i = 0 ;i < servicesList.length;i++){
+    servicesList[i].instances = [];
+    for(let j=0;j<instancesList.length;j++){
+
+      if(instancesList[j].serviceid === servicesList[i].id){
+        servicesList[i].instances.push(instancesList[j]);
+      }
+
+    } 
+  }
+
+  
+  return servicesList;
+
+}
+
+const mapStateToProps = (state,props) => {  
+  //console.log("INSIDE mapStateToProps ",state,props)
+
+  //CHECK IF STATE HAS CHANGED
+
   return {lefMenuVisibleProp: state.shell.lefMenuVisible,
-          servicesListProp:state.shell.servicesList,
-          //accessTokenProp : state.shell.access_token
+          //servicesListProp:state.shell.servicesList,
+          
+          combinedListsProp:combineLists(state.shell.servicesList , state.shell.instancesList)
+
+
          }
 
 };

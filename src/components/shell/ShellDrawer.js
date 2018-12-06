@@ -35,9 +35,19 @@ class ShellDrawer extends Component {
       */}
 
         <List>
-          {this.props.servicesList.map((item, index) => (
+          {this.props.combinedLists.map((item, index) => (
             <ListItem button key={item.id}>              
               <ListItemText primary={item.name} />
+
+                <List>
+                  {item.instances.map((item2, index2) => (
+                    <ListItem button key={item2.instanceid}>              
+                      <ListItemText primary={item2.instancename} />
+                    </ListItem>
+                  ))}
+                </List>
+
+
             </ListItem>
           ))}
         </List>
