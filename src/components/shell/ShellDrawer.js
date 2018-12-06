@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import SwipeableDrawer from '@material-ui/core/SwipeableDrawer';
 
 import List from '@material-ui/core/List';
@@ -36,19 +36,22 @@ class ShellDrawer extends Component {
 
         <List>
           {this.props.combinedLists.map((item, index) => (
-            <ListItem button key={item.id}>              
-              <ListItemText primary={item.name} />
-
-                <List>
-                  {item.instances.map((item2, index2) => (
-                    <ListItem button key={item2.instanceid}>              
-                      <ListItemText primary={item2.instancename} />
-                    </ListItem>
-                  ))}
-                </List>
-
-
+            <Fragment>
+              <ListItem button key={item.id}>              
+                <ListItemText primary={item.name} />
+              </ListItem>
+            
+            <ListItem button key={item.id}>   
+              <List>
+                {item.instances.map((item2, index2) => (
+                  <ListItem button key={item2.instanceid}>              
+                    <ListItemText primary={item2.instancename} />
+                  </ListItem>
+                ))}
+              </List>
             </ListItem>
+          </Fragment>
+
           ))}
         </List>
 
