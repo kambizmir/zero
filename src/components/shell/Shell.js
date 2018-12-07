@@ -3,7 +3,8 @@ import ShellAppbar from './ShellAppbar.js';
 import ShellDrawer from './ShellDrawer.js';
 
 import { connect } from 'react-redux';
-import {topLeftMenuIconClick, leftMenuDismmiss ,updateServices, updateUserInfo, updateInstances} from "../../redux/shell/action.js";
+import {topLeftMenuIconClick, leftMenuDismmiss ,updateServices, 
+        updateUserInfo, updateInstances, updateDrawerExpand} from "../../redux/shell/action.js";
 
 import {getServices , getInstances} from "./api.js"
 
@@ -38,12 +39,17 @@ class Shell extends Component {
  
 
   servicesReceivedCallback = (response)=>{
-    console.log(response)
+    //console.log(response)
+    
     this.props.updateStateWithServices(response.Items);    
+     
   }
 
   instancesReceivedCallback = (response)=>{
-    console.log(response)
+    //console.log(response)
+    for(let i=0;i<response.Items.length;i++){
+      response.Items[i]["visible"] = false;
+    }
     this.props.updateStateWithInstances(response.Items);  
   }
 
@@ -58,7 +64,9 @@ class Shell extends Component {
             <ShellAppbar handleTopLeftMenuClick = {this.props.handleTopLeftMenuClick}/>
             <ShellDrawer dismissDrawer = {this.props.dismissDrawer} 
                          visible = {this.props.lefMenuVisibleProp}
-                         combinedLists = {this.props.combinedListsProp}/>
+                         combinedLists = {this.props.combinedListsProp}
+                         drawerExpandChanged = {this.props.drawerExpandChanged}
+                         drawerExpandMap = {this.props.drawerExpandMapProp} />
           </div>      
     );
   }
@@ -95,7 +103,8 @@ const mapStateToProps = (state,props) => {
   return {lefMenuVisibleProp: state.shell.lefMenuVisible,
           //servicesListProp:state.shell.servicesList,
           
-          combinedListsProp:combineLists(state.shell.servicesList , state.shell.instancesList)
+          combinedListsProp:combineLists(state.shell.servicesList , state.shell.instancesList),
+          drawerExpandMapProp:state.shell.servicesExpandMap
 
 
          }
@@ -118,6 +127,9 @@ const mapDispatchToProps = dispatch => {
     },
     updateStateWithUserInfo: (userInfo, access_token, id_token)=>{
       dispatch(updateUserInfo(userInfo,access_token, id_token))
+    },
+    drawerExpandChanged: (item) =>{
+      dispatch(updateDrawerExpand(item));
     }
   };
 };

@@ -3,6 +3,8 @@ export const LEFT_MENU_DISMISS = "LEFT_MENU_DISMISS";
 export const UPDATE_SERVICES = "UPDATE_SERVICES";
 export const UPDATE_INSTANCES = "UPDATE_INSTANCES";
 export const UPDATE_USER_INFO = "UPDATE_USER_INFO";
+export const DRAWER_EXPAND_CHANGE = "DRAWER_EXPAND_CHANGE";
+
 
 
 export const topLeftMenuIconClick = () => ({
@@ -29,3 +31,9 @@ export const updateUserInfo = (userInfo, acces_token, id_token) => ({
   access_token:acces_token,
   id_token:id_token
 });
+
+export const updateDrawerExpand = (item) => ({
+  type: DRAWER_EXPAND_CHANGE,
+  item:item
+});
+
