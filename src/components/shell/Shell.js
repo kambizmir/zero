@@ -4,7 +4,8 @@ import ShellDrawer from './ShellDrawer.js';
 
 import { connect } from 'react-redux';
 import {topLeftMenuIconClick, leftMenuDismmiss ,updateServices, 
-        updateUserInfo, updateInstances, updateDrawerExpand} from "../../redux/shell/action.js";
+        updateUserInfo, updateInstances, updateDrawerExpand,
+        changeDrawerSwitchState} from "../../redux/shell/action.js";
 
 import {getServices , getInstances} from "./api.js"
 
@@ -66,7 +67,9 @@ class Shell extends Component {
                          visible = {this.props.lefMenuVisibleProp}
                          combinedLists = {this.props.combinedListsProp}
                          drawerExpandChanged = {this.props.drawerExpandChanged}
-                         drawerExpandMap = {this.props.drawerExpandMapProp} />
+                         drawerExpandMap = {this.props.drawerExpandMapProp} 
+                         switchClicked = {this.props.switchClicked}
+                         drawerSwitchMap = {this.props.drawerSwitchMapProp}/>
           </div>      
     );
   }
@@ -76,7 +79,7 @@ class Shell extends Component {
 
 const combineLists = (servicesList,instancesList) =>{
 
-  console.log("COMBINED ", servicesList,instancesList);
+  //console.log("COMBINED ", servicesList,instancesList);
 
 
   for(let i = 0 ;i < servicesList.length;i++){
@@ -96,6 +99,8 @@ const combineLists = (servicesList,instancesList) =>{
 }
 
 const mapStateToProps = (state,props) => {  
+
+  console.log("STATE=",state)
   //console.log("INSIDE mapStateToProps ",state,props)
 
   //CHECK IF STATE HAS CHANGED
@@ -104,8 +109,8 @@ const mapStateToProps = (state,props) => {
           //servicesListProp:state.shell.servicesList,
           
           combinedListsProp:combineLists(state.shell.servicesList , state.shell.instancesList),
-          drawerExpandMapProp:state.shell.servicesExpandMap
-
+          drawerExpandMapProp:state.shell.servicesExpandMap,
+          drawerSwitchMapProp:state.shell.instancesVisbleMap
 
          }
 
@@ -130,6 +135,10 @@ const mapDispatchToProps = dispatch => {
     },
     drawerExpandChanged: (item) =>{
       dispatch(updateDrawerExpand(item));
+    },
+    switchClicked: (item) =>{      
+      console.log(item)
+      dispatch(changeDrawerSwitchState(item));
     }
   };
 };

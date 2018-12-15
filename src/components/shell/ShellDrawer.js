@@ -10,24 +10,43 @@ import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 import Collapse from '@material-ui/core/Collapse';
 
+import Button from '@material-ui/core/Button';
+
+import { styled } from '@material-ui/styles';
+
+
+const MyButton = styled(Button)({
+  background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)',
+  border: 0,
+  borderRadius: 3,
+  boxShadow: '0 3px 5px 2px rgba(255, 105, 135, .3)',
+  color: 'white',
+  height: 48,
+  padding: '0 30px',
+});
+
+
+const ServiceListItem = styled(ListItem)({
+  //background: "lightgrey",
+  //color: 'green',
+
+});
 
 class ShellDrawer extends Component {
 
-  state = {
-    open: true,
-  };
-
   handleExpandClick = (item) => {
-    console.log(item)
-    this.props.drawerExpandChanged(item);
-    //this.setState(state => ({ open: !state.open }));
+    //console.log(item)
+    this.props.drawerExpandChanged(item);    
   };
 
+  handleSwitchClick = (item) =>{
+    //console.log("switch clicked", item)
+    this.props.switchClicked(item);
+  }
 
   dismissDrawer = () => () => {
     this.props.dismissDrawer();
   };
-
 
 
   render() {
@@ -41,12 +60,13 @@ class ShellDrawer extends Component {
 
               <ListItem button key={item.id}>              
                 <ListItemText primary={item.name} />
-
-                {this.props.drawerExpandMap[item.id] ? <ExpandLess  onClick={this.handleExpandClick.bind(this,item)}/> : <ExpandMore onClick={this.handleExpandClick.bind(this,item)} />}
-
-              </ListItem>
+                  {
+                    this.props.drawerExpandMap[item.id] ? 
+                    <ExpandLess  onClick={this.handleExpandClick.bind(this,item)} color="secondary"/> : 
+                    <ExpandMore onClick={this.handleExpandClick.bind(this,item)} color="secondary"/>
+                  }
+                </ListItem>
             
-                
               <Collapse in={this.props.drawerExpandMap[item.id]} timeout="auto" unmountOnExit>
 
                 <List key={item.id +"x"}>
@@ -55,9 +75,10 @@ class ShellDrawer extends Component {
                         <ListItemText primary={item2.instancename} />
 
                         <ListItemSecondaryAction>
-                          <Switch  />
+                          <Switch  key={item.id +"s"} 
+                                   onClick={this.handleSwitchClick.bind(this,item2)}
+                                   checked = {this.props.drawerSwitchMap[item2.instanceid]}/>
                         </ListItemSecondaryAction>
-
 
                       </ListItem>
                     ))}
@@ -65,14 +86,10 @@ class ShellDrawer extends Component {
 
               </Collapse>
               
-
           </Fragment>
 
           ))}
         </List>
-
-
-
 
       </div>
     );

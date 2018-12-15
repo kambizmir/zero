@@ -4,6 +4,7 @@ export const UPDATE_SERVICES = "UPDATE_SERVICES";
 export const UPDATE_INSTANCES = "UPDATE_INSTANCES";
 export const UPDATE_USER_INFO = "UPDATE_USER_INFO";
 export const DRAWER_EXPAND_CHANGE = "DRAWER_EXPAND_CHANGE";
+export const DRAWER_SWITCH_CLICK = "DRAWER_SWITCH_CLICK";
 
 
 
@@ -37,3 +38,7 @@ export const updateDrawerExpand = (item) => ({
   item:item
 });
 
+export const changeDrawerSwitchState = (item) => ({
+  type: DRAWER_SWITCH_CLICK,
+  item:item
+});

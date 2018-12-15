@@ -1,8 +1,9 @@
 import {TOP_LEFT_MENU_ICON_CLICK , LEFT_MENU_DISMISS, 
         UPDATE_SERVICES, UPDATE_INSTANCES,
         UPDATE_USER_INFO,
-        DRAWER_EXPAND_CHANGE
-        } from "./action";
+        DRAWER_EXPAND_CHANGE,
+        DRAWER_SWITCH_CLICK
+      } from "./action";
 
 const defaultState = {
   lefMenuVisible:false,
@@ -51,22 +52,26 @@ const shell = (state = defaultState, action) => {
       };
 
       case DRAWER_EXPAND_CHANGE:
-      
-      
+          
       let servicesExpandMapChanged = {...state.servicesExpandMap};
       servicesExpandMapChanged[action.item.id] = !servicesExpandMapChanged[action.item.id] ;
-
-console.log("HEY",{
-  ...state,
-  servicesExpandMap:servicesExpandMapChanged
-})
 
       return{
         ...state,
         servicesExpandMap:servicesExpandMapChanged
-      }
+      };
 
-      //return state;
+
+      case DRAWER_SWITCH_CLICK:
+
+      let instancesVisbleMapChanged = {...state.instancesVisbleMap};
+      instancesVisbleMapChanged[action.item.instanceid] = !instancesVisbleMapChanged[action.item.instanceid] ;
+
+      return{
+        ...state,
+        instancesVisbleMap:instancesVisbleMapChanged
+      };
+      
     
     default:
       return state;
