@@ -26,10 +26,8 @@ const MyButton = styled(Button)({
 });
 
 
-const ServiceListItem = styled(ListItem)({
-  //background: "lightgrey",
-  //color: 'green',
-
+const NestedListItem = styled(ListItem)({
+  paddingLeft: 30,
 });
 
 class ShellDrawer extends Component {
@@ -54,7 +52,7 @@ class ShellDrawer extends Component {
     
       <div>
     
-        <List dense={true}>
+        <List >
           {this.props.combinedLists.map((item, index) => (
             <Fragment key={item.id +"f"}>
 
@@ -67,24 +65,24 @@ class ShellDrawer extends Component {
                   }
                 </ListItem>
             
-              <Collapse in={this.props.drawerExpandMap[item.id]} timeout="auto" unmountOnExit>
+                <Collapse in={this.props.drawerExpandMap[item.id]} timeout="auto" unmountOnExit>
 
-                <List key={item.id +"x"}>
-                    {item.instances.map((item2, index2) => (
-                      <ListItem button key={item2.instanceid}>              
-                        <ListItemText primary={item2.instancename} />
+                  <List key={item.id +"x"} dense={true}>
+                      {item.instances.map((item2, index2) => (
+                        <NestedListItem button key={item2.instanceid}>              
+                          <ListItemText primary={item2.instancename} />
 
-                        <ListItemSecondaryAction>
-                          <Switch  key={item.id +"s"} 
-                                   onClick={this.handleSwitchClick.bind(this,item2)}
-                                   checked = {this.props.drawerSwitchMap[item2.instanceid]}/>
-                        </ListItemSecondaryAction>
+                          <ListItemSecondaryAction>
+                            <Switch  key={item.id +"s"} 
+                                    onClick={this.handleSwitchClick.bind(this,item2)}
+                                    checked = {this.props.drawerSwitchMap[item2.instanceid]}/>
+                          </ListItemSecondaryAction>
 
-                      </ListItem>
-                    ))}
-                </List>
+                        </NestedListItem>
+                      ))}
+                  </List>
 
-              </Collapse>
+                </Collapse>
               
           </Fragment>
 
