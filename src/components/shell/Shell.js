@@ -40,18 +40,26 @@ class Shell extends Component {
  
 
   servicesReceivedCallback = (response)=>{
-    //console.log(response)
+    if(response.status === -1){
+      alert(response.message);
+      return;
+    }
     
-    this.props.updateStateWithServices(response.Items);    
+    this.props.updateStateWithServices(response.response.Items);    
      
   }
 
   instancesReceivedCallback = (response)=>{
-    //console.log(response)
-    for(let i=0;i<response.Items.length;i++){
-      response.Items[i]["visible"] = false;
+    if(response.status === -1){
+      alert(response.message);
+      return;
     }
-    this.props.updateStateWithInstances(response.Items);  
+
+    //console.log(response)
+    for(let i=0;i<response.response.Items.length;i++){
+      response.response.Items[i]["visible"] = false;
+    }
+    this.props.updateStateWithInstances(response.response.Items);  
   }
 
  
