@@ -46,6 +46,11 @@ class ShellDrawer extends Component {
     this.props.dismissDrawer();
   };
 
+  serviceClicked= (item) =>{
+    //console.log(item)
+    this.props.serviceClicked(item);
+  }
+
 
   render() {
     const sideList = (
@@ -57,7 +62,7 @@ class ShellDrawer extends Component {
             <Fragment key={item.id +"f"}>
 
               <ListItem button key={item.id}>              
-                <ListItemText primary={item.name} />
+                <ListItemText primary={item.name} onClick={this.serviceClicked.bind(this,item)}/>
                   {
                     this.props.drawerExpandMap[item.id] ? 
                     <ExpandLess  onClick={this.handleExpandClick.bind(this,item)} color="secondary"/> : 

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import ShellAppbar from './ShellAppbar.js';
 import ShellDrawer from './ShellDrawer.js';
+import NewInstanceDialog from './NewInstanceDialog.js';
 
 import { connect } from 'react-redux';
 import {topLeftMenuIconClick, leftMenuDismmiss ,updateServices, 
@@ -15,9 +16,9 @@ class Shell extends Component {
 
   //HOW TO REFRESH TOKEN?
 
+  
   state = {
-    access_token:null,
-    userInfo:{},
+    createInstanceDialogOpen:false,
 
   }
 
@@ -62,6 +63,16 @@ class Shell extends Component {
     this.props.updateStateWithInstances(response.response.Items);  
   }
 
+  serviceClicked = (item)=>{
+    //alert(item.name + " clicked")
+
+    this.setState({createInstanceDialogOpen:true});
+  }
+
+  closeCreateInstance = () => {
+    this.setState({createInstanceDialogOpen:false});
+  }
+
  
 
   render() {
@@ -76,8 +87,12 @@ class Shell extends Component {
                          combinedLists = {this.props.combinedListsProp}
                          drawerExpandChanged = {this.props.drawerExpandChanged}
                          drawerExpandMap = {this.props.drawerExpandMapProp} 
-                         switchClicked = {this.props.switchClicked}
-                         drawerSwitchMap = {this.props.drawerSwitchMapProp}/>
+                         switchClicked = {this.props.instanceSwitchClicked}
+                         drawerSwitchMap = {this.props.drawerSwitchMapProp}
+                         serviceClicked = {this.serviceClicked}/>
+
+          <NewInstanceDialog open={this.state.createInstanceDialogOpen}
+                             close = {this.closeCreateInstance}/>                         
           </div>      
     );
   }
@@ -111,7 +126,7 @@ const mapStateToProps = (state,props) => {
   console.log("STATE=",state)
   //console.log("INSIDE mapStateToProps ",state,props)
 
-  //CHECK IF STATE HAS CHANGED
+  //CHECK IF STATE HAS CHANGED - HOW?
 
   return {lefMenuVisibleProp: state.shell.lefMenuVisible,
           //servicesListProp:state.shell.servicesList,
@@ -144,8 +159,7 @@ const mapDispatchToProps = dispatch => {
     drawerExpandChanged: (item) =>{
       dispatch(updateDrawerExpand(item));
     },
-    switchClicked: (item) =>{      
-      console.log(item)
+    instanceSwitchClicked: (item) =>{            
       dispatch(changeDrawerSwitchState(item));
     }
   };
