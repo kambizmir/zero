@@ -20,8 +20,6 @@ export default class FormDialog extends React.Component {
   };
 
   render() {
-
-    console.log(this.props.item)
     return (
       <div>
         <Dialog
@@ -29,10 +27,7 @@ export default class FormDialog extends React.Component {
           onClose={this.handleClose}
           aria-labelledby="form-dialog-title"
         >
-          <DialogTitle id="form-dialog-title">Create
-                      {" "  +  (this.props.item?this.props.item.name:"")  + " "}
-                       Instance
-          </DialogTitle>
+          <DialogTitle id="form-dialog-title">Create Instance</DialogTitle>
           <DialogContent>
  
             <TextField

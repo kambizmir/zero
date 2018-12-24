@@ -19,6 +19,7 @@ class Shell extends Component {
   
   state = {
     createInstanceDialogOpen:false,
+    itemBeingCreated:null,
 
   }
 
@@ -66,7 +67,8 @@ class Shell extends Component {
   serviceClicked = (item)=>{
     //alert(item.name + " clicked")
 
-    this.setState({createInstanceDialogOpen:true});
+    this.setState({createInstanceDialogOpen:true,
+                   itemBeingCreated:item});
   }
 
   closeCreateInstance = () => {
@@ -92,7 +94,8 @@ class Shell extends Component {
                          serviceClicked = {this.serviceClicked}/>
 
           <NewInstanceDialog open={this.state.createInstanceDialogOpen}
-                             close = {this.closeCreateInstance}/>                         
+                             close = {this.closeCreateInstance}
+                             item = {this.state.itemBeingCreated}/>                         
           </div>      
     );
   }
