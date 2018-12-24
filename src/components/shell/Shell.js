@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import ShellAppbar from './ShellAppbar.js';
 import ShellDrawer from './ShellDrawer.js';
 import NewInstanceDialog from './NewInstanceDialog.js';
+import EditInstanceDialog from './EditInstanceDialog.js';
 
 import { connect } from 'react-redux';
 import {topLeftMenuIconClick, leftMenuDismmiss ,updateServices, 
@@ -20,6 +21,8 @@ class Shell extends Component {
   state = {
     createInstanceDialogOpen:false,
     itemBeingCreated:null,
+    editInstanceDialogOpen:false,
+    itemBeingEdited:null,
 
   }
 
@@ -71,8 +74,17 @@ class Shell extends Component {
                    itemBeingCreated:item});
   }
 
+  instanceClicked = (item)=>{
+    this.setState({editInstanceDialogOpen:true,
+      itemBeingEdited:item});
+  }
+
   closeCreateInstance = () => {
     this.setState({createInstanceDialogOpen:false});
+  }
+
+  closeEditInstance = () => {
+    this.setState({editInstanceDialogOpen:false});
   }
 
  
@@ -91,11 +103,17 @@ class Shell extends Component {
                          drawerExpandMap = {this.props.drawerExpandMapProp} 
                          switchClicked = {this.props.instanceSwitchClicked}
                          drawerSwitchMap = {this.props.drawerSwitchMapProp}
-                         serviceClicked = {this.serviceClicked}/>
+                         serviceClicked = {this.serviceClicked}
+                         instanceClicked = {this.instanceClicked}/>
 
           <NewInstanceDialog open={this.state.createInstanceDialogOpen}
                              close = {this.closeCreateInstance}
-                             item = {this.state.itemBeingCreated}/>                         
+                             item = {this.state.itemBeingCreated}/>   
+
+          <EditInstanceDialog open={this.state.editInstanceDialogOpen}
+                             close = {this.closeEditInstance}
+                             item = {this.state.itemBeingEdited}/>                                
+
           </div>      
     );
   }
