@@ -26,6 +26,19 @@ export const getInstances = (access_token) => {
   }).then(res => res.json());
 };
 
+
+export const createInstance = (access_token,service,instanceid,instancename) => {
+  let url = instancesUrl 
+  return fetch(url, {
+    method: "POST",
+    headers:{
+      Authorization:"Bearer " + access_token
+    },
+    body: JSON.stringify({service:service,instanceid:instanceid,instancename:instancename})
+    //credentials: "include"  //CORS
+  }).then(res => res.json());
+};
+
 /*export const getservices = donationId => {
     let url = `/app/rs/rsd/srd/donations/${donationId}`;
     return fetch(url, {

@@ -9,7 +9,7 @@ import {topLeftMenuIconClick, leftMenuDismmiss ,updateServices,
         updateUserInfo, updateInstances, updateDrawerExpand,
         changeDrawerSwitchState} from "../../redux/shell/action.js";
 
-import {getServices , getInstances} from "./api.js"
+import {getServices , getInstances , createInstance} from "./api.js"
 
 
 class Shell extends Component {
@@ -29,29 +29,22 @@ class Shell extends Component {
   componentDidMount() {
     
     this.props.updateStateWithUserInfo(this.props.userInfo , this.props.access_token, this.props.id_token); 
-
-    
     this.setState(
                 {access_token:this.props.access_token,
                 userInfo:this.props.userInfo}
               );         
 
     getServices(this.props.access_token).then(this.servicesReceivedCallback);
-
     getInstances(this.props.access_token).then(this.instancesReceivedCallback);
 
   }
-
- 
 
   servicesReceivedCallback = (response)=>{
     if(response.status === -1){
       alert(response.message);
       return;
-    }
-    
-    this.props.updateStateWithServices(response.response.Items);    
-     
+    }    
+    this.props.updateStateWithServices(response.response.Items);         
   }
 
   instancesReceivedCallback = (response)=>{
@@ -67,9 +60,19 @@ class Shell extends Component {
     this.props.updateStateWithInstances(response.response.Items);  
   }
 
-  serviceClicked = (item)=>{
-    //alert(item.name + " clicked")
+  instancesCreateCallback = (response) =>{
+    //console.log("INSTANCE CREATE RESPONSE:", response)
+    if(response.status===0){
+      getServices(this.props.access_token).then(this.servicesReceivedCallback);
+      getInstances(this.props.access_token).then(this.instancesReceivedCallback);
+      this.setState({createInstanceDialogOpen:false,itemBeingCreated:null});
+    }
+    else{
+      alert(response.message);
+    }
+  }
 
+  serviceClicked = (item)=>{  
     this.setState({createInstanceDialogOpen:true,
                    itemBeingCreated:item});
   }
@@ -87,11 +90,14 @@ class Shell extends Component {
     this.setState({editInstanceDialogOpen:false});
   }
 
- 
+  createInstanceRequest = (service,id,name) =>{
+    //console.log("Requst to create instance " , service, id, name)
+    createInstance(this.props.access_token,service,id,name).then(this.instancesCreateCallback);
+  }
 
   render() {
 
-    console.log(this.state)
+    //console.log(this.state)
 
     return (
           <div>
@@ -108,7 +114,8 @@ class Shell extends Component {
 
           <NewInstanceDialog open={this.state.createInstanceDialogOpen}
                              close = {this.closeCreateInstance}
-                             item = {this.state.itemBeingCreated}/>   
+                             item = {this.state.itemBeingCreated}
+                             create = {this.createInstanceRequest}/>   
 
           <EditInstanceDialog open={this.state.editInstanceDialogOpen}
                              close = {this.closeEditInstance}

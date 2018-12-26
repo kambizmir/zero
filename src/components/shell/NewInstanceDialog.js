@@ -8,20 +8,32 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 
 export default class FormDialog extends React.Component {
   state = {
-    open: false,
+    idText : "",
+    nameText : ""
+
   };
 
-  handleClickOpen = () => {
-    this.setState({ open: true });
-  };
+
 
   handleClose = () => {
     this.props.close();
   };
 
+  handleCreate = () => {      
+    const cleanService = Object.assign({}, this.props.item, { instances: undefined });
+    this.props.create(cleanService, this.state.idText,this.state.nameText);
+  }
+
+  onIdChange = (e) => {    
+    this.setState({idText:e.target.value});
+  }
+
+  onNameChange = (e) => {
+    this.setState({nameText:e.target.value});
+  }
+
   render() {
 
-    console.log(this.props.item)
     return (
       <div>
         <Dialog
@@ -41,6 +53,7 @@ export default class FormDialog extends React.Component {
               id="id"
               label="Id"              
               fullWidth
+              onChange = {this.onIdChange}
             />
 
             <TextField              
@@ -48,6 +61,7 @@ export default class FormDialog extends React.Component {
               id="name"
               label="Name"              
               fullWidth
+              onChange = {this.onNameChange}
             />
 
           </DialogContent>
@@ -55,7 +69,7 @@ export default class FormDialog extends React.Component {
             <Button onClick={this.handleClose} color="primary">
               Cancel
             </Button>
-            <Button onClick={this.handleClose} color="primary">
+            <Button onClick={this.handleCreate} color="primary">
               Create
             </Button>
           </DialogActions>
