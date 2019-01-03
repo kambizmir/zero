@@ -13,9 +13,13 @@ export default class FormDialog extends React.Component {
 
   };
 
+  componentDidUpdate(prevProps, prevState, snapshot){
+    if(this.props.open  && !prevProps.open){
+      this.setState({idText : "",nameText : "" });
+    }
+  }
 
-
-  handleClose = () => {
+  handleClose = () => {    
     this.props.close();
   };
 
@@ -48,12 +52,13 @@ export default class FormDialog extends React.Component {
           <DialogContent>
  
             <TextField
-              autoFocus
+              
               margin="dense"
               id="id"
               label="Id"              
               fullWidth
               onChange = {this.onIdChange}
+              value = {this.state.idText}
             />
 
             <TextField              
@@ -62,6 +67,7 @@ export default class FormDialog extends React.Component {
               label="Name"              
               fullWidth
               onChange = {this.onNameChange}
+              value = {this.state.nameText}
             />
 
           </DialogContent>
