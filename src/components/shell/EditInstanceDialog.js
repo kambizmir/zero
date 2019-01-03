@@ -8,16 +8,27 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 
 export default class FormDialog extends React.Component {
   state = {
-    open: false,
+    nameText : ""
   };
 
-  handleClickOpen = () => {
-    this.setState({ open: true });
-  };
+  componentDidUpdate(prevProps, prevState, snapshot){
+    if(this.props.open  && !prevProps.open){
+      this.setState({nameText : this.props.item?this.props.item.instancename:"" });
+    }
+  }
+
 
   handleClose = () => {
     this.props.close();
   };
+
+  handleSave = () => {    
+    this.props.save(this.props.item,this.state.nameText);    
+  };
+
+  onNameChange = (e) => {
+    this.setState({nameText:e.target.value});
+  }
 
   render() {
     return (
@@ -28,25 +39,18 @@ export default class FormDialog extends React.Component {
           aria-labelledby="form-dialog-title"
         >
           <DialogTitle id="form-dialog-title">
-                      Edit
+                      Edit Instance
                       {" "  +  (this.props.item?this.props.item.instanceid:"")  + " "}
-                      Instance
           </DialogTitle>
           <DialogContent>
- 
-            <TextField
-              autoFocus
-              margin="dense"
-              id="id"
-              label="Id"              
-              fullWidth
-            />
 
             <TextField              
               margin="dense"
               id="name"
               label="Name"              
               fullWidth
+              onChange = {this.onNameChange}
+              value = {this.state.nameText}
             />
 
           </DialogContent>
@@ -54,8 +58,8 @@ export default class FormDialog extends React.Component {
             <Button onClick={this.handleClose} color="primary">
               Cancel
             </Button>
-            <Button onClick={this.handleClose} color="primary">
-              Create
+            <Button onClick={this.handleSave} color="primary">
+              Save
             </Button>
           </DialogActions>
         </Dialog>

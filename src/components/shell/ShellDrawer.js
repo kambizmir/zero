@@ -78,7 +78,7 @@ class ShellDrawer extends Component {
                   <List key={item.id +"x"} dense={true}>
                       {item.instances.map((item2, index2) => (
                         <NestedListItem button key={item2.instanceid}>              
-                          <ListItemText primary={item2.instancename}  onClick={this.instanceClicked.bind(this,item2)}/>
+                          <ListItemText primary={item2.instanceid + "-" + item2.instancename}  onClick={this.instanceClicked.bind(this,item2)}/>
 
                           <ListItemSecondaryAction>
                             <Switch  key={item.id +"s"} 

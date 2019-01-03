@@ -9,7 +9,7 @@ import {topLeftMenuIconClick, leftMenuDismmiss ,updateServices,
         updateUserInfo, updateInstances, updateDrawerExpand,
         changeDrawerSwitchState} from "../../redux/shell/action.js";
 
-import {getServices , getInstances , createInstance} from "./api.js"
+import {getServices , getInstances , createInstance, updateInstance} from "./api.js"
 
 
 class Shell extends Component {
@@ -60,6 +60,21 @@ class Shell extends Component {
     this.props.updateStateWithInstances(response.response.Items);  
   }
 
+
+  instancesUpdateCallback = (response) =>{
+    //console.log("UPDATE RESPONS",response)
+    if(response.status===0){
+      getServices(this.props.access_token).then(this.servicesReceivedCallback);
+      getInstances(this.props.access_token).then(this.instancesReceivedCallback);
+      this.setState({editInstanceDialogOpen:false,itemBeingEdited:null});
+    }
+    else{
+      alert(response.message);
+    }
+
+    
+  }
+
   instancesCreateCallback = (response) =>{
     //console.log("INSTANCE CREATE RESPONSE:", response)
     if(response.status===0){
@@ -89,10 +104,15 @@ class Shell extends Component {
   closeEditInstance = () => {
     this.setState({editInstanceDialogOpen:false});
   }
-
+  
   createInstanceRequest = (service,id,name) =>{
     //console.log("Requst to create instance " , service, id, name)
     createInstance(this.props.access_token,service,id,name).then(this.instancesCreateCallback);
+  }
+
+  updateInstanceRequest = (instance,name) =>{
+    console.log("Request to update instance", instance,name)
+    updateInstance(this.props.access_token,instance,name).then(this.instancesUpdateCallback);
   }
 
   render() {
@@ -112,14 +132,15 @@ class Shell extends Component {
                          serviceClicked = {this.serviceClicked}
                          instanceClicked = {this.instanceClicked}/>
 
-          <NewInstanceDialog open={this.state.createInstanceDialogOpen}
-                             close = {this.closeCreateInstance}
+          <NewInstanceDialog open={this.state.createInstanceDialogOpen}                             
                              item = {this.state.itemBeingCreated}
+                             close = {this.closeCreateInstance}
                              create = {this.createInstanceRequest}/>   
 
-          <EditInstanceDialog open={this.state.editInstanceDialogOpen}
+          <EditInstanceDialog open={this.state.editInstanceDialogOpen}                             
+                             item = {this.state.itemBeingEdited}
                              close = {this.closeEditInstance}
-                             item = {this.state.itemBeingEdited}/>                                
+                             save = {this.updateInstanceRequest}/>                                
 
           </div>      
     );
