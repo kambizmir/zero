@@ -26,6 +26,10 @@ export default class FormDialog extends React.Component {
     this.props.save(this.props.item,this.state.nameText);    
   };
 
+  handleDelete = ()=>{
+    this.props.delete(this.props.item);
+  }
+
   onNameChange = (e) => {
     this.setState({nameText:e.target.value});
   }
@@ -60,6 +64,9 @@ export default class FormDialog extends React.Component {
             </Button>
             <Button onClick={this.handleSave} color="primary">
               Save
+            </Button>
+            <Button onClick={this.handleDelete} color="secondary">
+              Delete
             </Button>
           </DialogActions>
         </Dialog>

@@ -3,13 +3,16 @@ import ShellAppbar from './ShellAppbar.js';
 import ShellDrawer from './ShellDrawer.js';
 import NewInstanceDialog from './NewInstanceDialog.js';
 import EditInstanceDialog from './EditInstanceDialog.js';
+import ConfirmDialog from './ConfirmDialog.js';
+
+import { toast, Zoom ,Flip} from 'react-toastify';
 
 import { connect } from 'react-redux';
 import {topLeftMenuIconClick, leftMenuDismmiss ,updateServices, 
         updateUserInfo, updateInstances, updateDrawerExpand,
         changeDrawerSwitchState} from "../../redux/shell/action.js";
 
-import {getServices , getInstances , createInstance, updateInstance} from "./api.js"
+import {getServices , getInstances , createInstance, updateInstance, deleteInstance} from "./api.js"
 
 
 class Shell extends Component {
@@ -23,6 +26,14 @@ class Shell extends Component {
     itemBeingCreated:null,
     editInstanceDialogOpen:false,
     itemBeingEdited:null,
+
+    
+    confirmDialogTitle:null,
+    confirmDialogContentText:null,
+    confirmDialogPositiveText:null,
+    confirmDialogNegativeText:null,
+    confirmDialogOpen:false,
+    confirmDialogItem:null
 
   }
 
@@ -41,7 +52,11 @@ class Shell extends Component {
 
   servicesReceivedCallback = (response)=>{
     if(response.status === -1){
-      alert(response.message);
+      //alert(response.message);
+      toast(response.message, {
+        position: toast.POSITION.TOP_CENTER,
+        transition: Flip
+      });
       return;
     }    
     this.props.updateStateWithServices(response.response.Items);         
@@ -49,7 +64,11 @@ class Shell extends Component {
 
   instancesReceivedCallback = (response)=>{
     if(response.status === -1){
-      alert(response.message);
+      //alert(response.message);
+      toast(response.message, {
+        position: toast.POSITION.TOP_CENTER,
+        transition: Flip
+      });
       return;
     }
 
@@ -60,6 +79,21 @@ class Shell extends Component {
     this.props.updateStateWithInstances(response.response.Items);  
   }
 
+  instancesCreateCallback = (response) =>{
+    //console.log("INSTANCE CREATE RESPONSE:", response)
+    if(response.status===0){
+      getServices(this.props.access_token).then(this.servicesReceivedCallback);
+      getInstances(this.props.access_token).then(this.instancesReceivedCallback);
+      this.setState({createInstanceDialogOpen:false,itemBeingCreated:null});
+    }
+    else{
+      //alert(response.message);
+      toast(response.message, {
+        position: toast.POSITION.TOP_CENTER,
+        transition: Flip
+      });
+    }
+  }
 
   instancesUpdateCallback = (response) =>{
     //console.log("UPDATE RESPONS",response)
@@ -69,21 +103,29 @@ class Shell extends Component {
       this.setState({editInstanceDialogOpen:false,itemBeingEdited:null});
     }
     else{
-      alert(response.message);
+      //alert(response.message);
+      //toast(response.message);
+      toast(response.message, {
+        position: toast.POSITION.TOP_CENTER,
+        transition: Flip
+      });
     }
-
-    
   }
 
-  instancesCreateCallback = (response) =>{
-    //console.log("INSTANCE CREATE RESPONSE:", response)
+  instancesDeleteCallback = (response) =>{
+    
     if(response.status===0){
       getServices(this.props.access_token).then(this.servicesReceivedCallback);
       getInstances(this.props.access_token).then(this.instancesReceivedCallback);
-      this.setState({createInstanceDialogOpen:false,itemBeingCreated:null});
+      this.setState({editInstanceDialogOpen:false,itemBeingEdited:null});
     }
     else{
-      alert(response.message);
+      //alert(response.message);
+      //toast(response.message);
+      toast(response.message, {
+        position: toast.POSITION.TOP_CENTER,
+        transition: Flip
+      });
     }
   }
 
@@ -111,9 +153,40 @@ class Shell extends Component {
   }
 
   updateInstanceRequest = (instance,name) =>{
-    console.log("Request to update instance", instance,name)
+    //console.log("Request to update instance", instance,name)
     updateInstance(this.props.access_token,instance,name).then(this.instancesUpdateCallback);
   }
+
+  showDeleteConfirmDialog = (instance) =>{
+    this.setState(
+      {confirmDialogTitle:"Do you want to delete this instance?",
+       confirmDialogContentText:"",
+       confirmDialogPositiveText:"Yes",
+       confirmDialogNegativeText:"No",
+       confirmDialogOpen:true,
+       confirmDialogItem:instance,
+      }
+    );
+  }
+
+  deleteInstanceRequest = (instance) =>{
+    deleteInstance(this.props.access_token,instance).then(this.instancesDeleteCallback);
+  }
+
+  closeConfirmDialog = ()=>{
+    this.setState({confirmDialogOpen:false});
+  }
+
+  confirmDialogPositiveClick = (instance)=>{
+    //console.log("ITEM TO DELETE",instance)
+    this.setState({confirmDialogOpen:false});
+    this.deleteInstanceRequest(instance);
+  }
+
+  confirmDialogNegativeClick = ()=>{
+    this.setState({confirmDialogOpen:false});
+  }
+
 
   render() {
 
@@ -140,9 +213,24 @@ class Shell extends Component {
           <EditInstanceDialog open={this.state.editInstanceDialogOpen}                             
                              item = {this.state.itemBeingEdited}
                              close = {this.closeEditInstance}
-                             save = {this.updateInstanceRequest}/>                                
+                             save = {this.updateInstanceRequest}
+                             delete = {this.showDeleteConfirmDialog}
+          />      
+
+          <ConfirmDialog open = {this.state.confirmDialogOpen}
+                         title = {this.state.confirmDialogTitle}
+                         contentText = {this.state.confirmDialogContentText}
+                         positiveText = {this.state.confirmDialogPositiveText}
+                         negativeText = {this.state.confirmDialogNegativeText}
+                         close = {this.closeConfirmDialog}
+                         positiveClick = {this.confirmDialogPositiveClick}
+                         negativeClick = {this.confirmDialogNegativeClick}
+                         item = {this.state.confirmDialogItem}
+          />                          
 
           </div>      
+
+  
     );
   }
 

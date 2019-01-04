@@ -10,6 +10,8 @@
     "react-dom": "^16.6.0",
     "react-redux": "^5.1.0",
     "react-scripts": "2.0.5",
+    "react-toastify": "^4.5.2",
+    "react-toasts": "^2.0.14",
     "redux": "^4.0.1"
   },
   "scripts": {

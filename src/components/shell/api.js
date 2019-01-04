@@ -52,6 +52,21 @@ export const updateInstance = (access_token,instance,instancename) => {
   }).then(res => res.json());
 };
 
+
+export const deleteInstance = (access_token,instance) => {
+  let url = instancesUrl 
+  return fetch(url, {
+    method: "DELETE",
+    headers:{
+      Authorization:"Bearer " + access_token
+    },
+    body: JSON.stringify({instance:instance})
+    //credentials: "include"  //CORS
+  }).then(res => res.json());
+};
+
+
+
 /*export const getservices = donationId => {
     let url = `/app/rs/rsd/srd/donations/${donationId}`;
     return fetch(url, {
