@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
+import { toast ,Flip} from 'react-toastify';
+import { connect } from 'react-redux';
+
 import ShellAppbar from './ShellAppbar.js';
 import ShellDrawer from './ShellDrawer.js';
 import NewInstanceDialog from './NewInstanceDialog.js';
 import EditInstanceDialog from './EditInstanceDialog.js';
 import ConfirmDialog from './ConfirmDialog.js';
+import ShellCanvas from './ShellCanvas.js'
 
-import { toast, Zoom ,Flip} from 'react-toastify';
-
-import { connect } from 'react-redux';
 import {topLeftMenuIconClick, leftMenuDismmiss ,updateServices, 
         updateUserInfo, updateInstances, updateDrawerExpand,
         changeDrawerSwitchState} from "../../redux/shell/action.js";
@@ -17,42 +18,39 @@ import {getServices , getInstances , createInstance, updateInstance, deleteInsta
 
 class Shell extends Component {
 
+  //TODO: HOW TO REFRESH TOKEN?
 
-  //HOW TO REFRESH TOKEN?
-
-  
   state = {
+    access_token:null,
+    userInfo:null,
+
     createInstanceDialogOpen:false,
     itemBeingCreated:null,
     editInstanceDialogOpen:false,
     itemBeingEdited:null,
 
-    
     confirmDialogTitle:null,
     confirmDialogContentText:null,
     confirmDialogPositiveText:null,
     confirmDialogNegativeText:null,
     confirmDialogOpen:false,
     confirmDialogItem:null
-
-  }
+  };
 
   componentDidMount() {
-    
     this.props.updateStateWithUserInfo(this.props.userInfo , this.props.access_token, this.props.id_token); 
-    this.setState(
-                {access_token:this.props.access_token,
-                userInfo:this.props.userInfo}
-              );         
+    
+    this.setState({
+        access_token:this.props.access_token,
+        userInfo:this.props.userInfo
+    });         
 
-    getServices(this.props.access_token).then(this.servicesReceivedCallback);
+    getServices(this.props.access_token).then(this.servicesReceivedCallback)
     getInstances(this.props.access_token).then(this.instancesReceivedCallback);
-
   }
 
   servicesReceivedCallback = (response)=>{
-    if(response.status === -1){
-      //alert(response.message);
+    if(response.status === -1){      
       toast(response.message, {
         position: toast.POSITION.TOP_CENTER,
         transition: Flip
@@ -63,8 +61,7 @@ class Shell extends Component {
   }
 
   instancesReceivedCallback = (response)=>{
-    if(response.status === -1){
-      //alert(response.message);
+    if(response.status === -1){      
       toast(response.message, {
         position: toast.POSITION.TOP_CENTER,
         transition: Flip
@@ -137,6 +134,13 @@ class Shell extends Component {
   instanceClicked = (item)=>{
     this.setState({editInstanceDialogOpen:true,
       itemBeingEdited:item});
+
+
+
+
+
+
+      //this.canvas.addInstance(item);
   }
 
   closeCreateInstance = () => {
@@ -226,7 +230,18 @@ class Shell extends Component {
                          positiveClick = {this.confirmDialogPositiveClick}
                          negativeClick = {this.confirmDialogNegativeClick}
                          item = {this.state.confirmDialogItem}
-          />                          
+          />                   
+
+
+          <ShellCanvas 
+                        ref={x => { this.canvas = x; }}
+                        //google_token = {this.props.google_token}
+                        //userId = {this.props.userId}
+                        //userName = {this.props.googleProfile.name}
+                        //socket = {this.props.socket}
+                        instanceToShow = {this.props.instanceToShowProp}
+                        instanceToHide = {this.props.instanceToHideProp}
+          />
 
           </div>      
 
@@ -270,7 +285,10 @@ const mapStateToProps = (state,props) => {
           
           combinedListsProp:combineLists(state.shell.servicesList , state.shell.instancesList),
           drawerExpandMapProp:state.shell.servicesExpandMap,
-          drawerSwitchMapProp:state.shell.instancesVisbleMap
+          drawerSwitchMapProp:state.shell.instancesVisbleMap,
+
+          instanceToShowProp:state.shell.instanceToShow,
+          instanceToHideProp:state.shell.instanceToHide,
 
          }
 

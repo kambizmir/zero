@@ -13,7 +13,9 @@ const defaultState = {
   access_token:null,
   id_token:null,
   servicesExpandMap:{},
-  instancesVisbleMap:{}
+  instancesVisbleMap:{},
+  instanceToShow:null,
+  instanceToHide:null,
 };
 
 const shell = (state = defaultState, action) => {
@@ -67,10 +69,23 @@ const shell = (state = defaultState, action) => {
       let instancesVisbleMapChanged = {...state.instancesVisbleMap};
       instancesVisbleMapChanged[action.item.instanceid] = !instancesVisbleMapChanged[action.item.instanceid] ;
 
-      return{
-        ...state,
-        instancesVisbleMap:instancesVisbleMapChanged
-      };
+      
+      if( instancesVisbleMapChanged[action.item.instanceid] ){
+        return{
+          ...state,
+          instancesVisbleMap:instancesVisbleMapChanged, 
+          instanceToShow:action.item,
+          instanceToHide:null
+        };
+      }
+      else{
+        return{
+          ...state,
+          instancesVisbleMap:instancesVisbleMapChanged,
+          instanceToShow:null,
+          instanceToHide:action.item
+        };
+      }
       
     
     default:

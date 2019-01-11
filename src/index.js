@@ -1,19 +1,18 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { Provider } from "react-redux";
+
 import './index.css';
 import App from './App';
+import store from "./redux/store";
 import * as serviceWorker from './serviceWorker';
 
-import { Provider } from "react-redux";
-import store from "./redux/store";
-
-//import {createStore} from 'redux';
-//const store = createStore(function(){});
+//////////
 
 const auth_url = "https://kam3.auth.us-west-2.amazoncognito.com/login?response_type=token&client_id=7voqbpalbkemupqubr0p650f8i&redirect_uri=http://localhost:3000";
 //const auth_url =   "https://kam3.auth.us-west-2.amazoncognito.com/login?response_type=token&client_id=7voqbpalbkemupqubr0p650f8i&redirect_uri=https://www.codecone.net";
 
-
+//////////
 
 const user_info_url = "https://kam3.auth.us-west-2.amazoncognito.com/oauth2/userInfo";
 
@@ -35,19 +34,17 @@ if (access_token){
      .then(function(response){
       return response.json()
     })
-    .then(function(jsonData){
-        //console.log("DATA",jsonData)   
+    .then(function(jsonData){    
         if(jsonData.email){
-            //window.location.hash = ""; ////???
+            
+            //window.location.hash = ""; //// TODO: Remove the token?
+            
             ReactDOM.render(
                 <Provider store={store}>
                   <App userInfo = {jsonData} access_token={access_token} id_token={id_token}/>
                 </Provider>,
                document.getElementById('root'));
-
-            // If you want your app to work offline and load faster, you can change
-            // unregister() to register() below. Note this comes with some pitfalls.
-            // Learn more about service workers: http://bit.ly/CRA-PWA
+            
             serviceWorker.unregister();
         }
         else if(jsonData.error){
@@ -58,7 +55,7 @@ if (access_token){
         }            
     })
     .catch(function(err) {        
-      console.log("ERROR",err)
+      alert("Can not get user information");
     })
 
 }
