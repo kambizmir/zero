@@ -65,7 +65,8 @@ class PButton extends Component{
             <div style={contentStyle}>    
 
               <div >                            
-                {this.state.instanceName}                   
+                {/* {this.state.instanceName}                    */}
+                {this.props.item.instancename}
                 <br/>
                 <input type="range"  min={0} max={10} value={this.state.value>=0? this.state.value: 0} onChange = {this.changeHandler} 
                       onMouseUp = {this.mouseHandler} onTouchEnd = {this.mouseHandler}></input>

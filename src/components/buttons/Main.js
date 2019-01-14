@@ -55,7 +55,11 @@ class PButton extends Component{
             <div style={contentStyle}>  
             
            
-            <Button raised color="primary" onClick = {this.clickHandler}> {this.state.instanceName}</Button>
+            <Button raised color="primary" onClick = {this.clickHandler}> 
+               {/* {this.state.instanceName} */}
+               {this.props.item.instancename}
+            </Button>
+            
             <br/>
                         
             </div>

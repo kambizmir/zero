@@ -28,6 +28,8 @@ class TSwitch extends Component{
 
   render(){
 
+    console.log(this.props)
+
     var topStyle = {
       position:"relative",
     }
@@ -62,7 +64,8 @@ class TSwitch extends Component{
         <div style={contentStyle}>        	       
     
           <div >                            
-            {this.state.instanceName}
+            {/*this.state.instanceName */}
+            {this.props.item.instancename}
             <br/>
             <Switch onChange = {this.changeHandler} 
             checked={this.state.switchState || false}/>            
