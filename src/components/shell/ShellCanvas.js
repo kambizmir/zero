@@ -6,8 +6,8 @@ class ShellCanvas extends Component{
     super(props);
     this.state = { pushData:null, xChildren:{} }
 
-    this.processPushData = this.processPushData.bind(this); 
-    this.addInstance = this.addInstance.bind(this);  
+    //this.processPushData = this.processPushData.bind(this); 
+    //this.addInstance = this.addInstance.bind(this);  
   }
 
 
@@ -31,30 +31,31 @@ class ShellCanvas extends Component{
 
     import("../" + item.serviceid + "/Main").then( 
         Bar => {
-
           var XYZ = Bar.default;
-          this.state.xChildren[item.instanceid]=
-              (
-                <div key={item.instanceid} style={divStyle}> 
-                  <XYZ  
-                      ref={(input) => {this[item.instanceid] = input }}
-                      item = {item} 
-                      google_token = {this.props.google_token}
-                      userId = {this.props.userId}
-                      userName = {this.props.userName}
-                      socket = {this.props.socket}
-                      pushData = {this.state.pushData}/>
-                </div> 
-              );
-
-              //this.forceUpdate();
+          let yChildren = {...this.state.xChildren };
+          yChildren[item.instanceid] =   (
+            <div key={item.instanceid} style={divStyle}> 
+              <XYZ  
+                  ref={(input) => {this[item.instanceid] = input }}
+                  item = {item} 
+                  google_token = {this.props.google_token}
+                  userId = {this.props.userId}
+                  userName = {this.props.userName}
+                  socket = {this.props.socket}
+                  pushData = {this.state.pushData}/>
+            </div> 
+          );
+          this.setState({xChildren:yChildren})
        }
     )
    
   }
 
   removeInstance(instanceid){
-     delete this.state.xChildren[instanceid];
+    let yChildren = {...this.state.xChildren };
+    delete yChildren[instanceid];
+
+    this.setState({xChildren:yChildren})
   }
 
   updateInstance(instanceid){
@@ -64,18 +65,15 @@ class ShellCanvas extends Component{
   }
 
   processPushData(item,data){
-    //this.setState({pushData:data})
-
     if(this[item.instanceid])
       this[item.instanceid].applyPushData(data);
   }
 
   componentDidUpdate(prevProps, prevState, snapshot){
-    if(this.props.instanceToShow ){
+    if(this.props.instanceToShow && !this.state.xChildren.hasOwnProperty(this.props.instanceToShow.instanceid) ){
       this.addInstance(this.props.instanceToShow );
-      //console.log("ITEM TO SHOW" , this.props.instanceToShow )
     }
-    if(this.props.instanceToHide){
+    if(this.props.instanceToHide && this.state.xChildren.hasOwnProperty(this.props.instanceToHide.instanceid)){
       this.removeInstance(this.props.instanceToHide.instanceid)
     }
   }
@@ -96,16 +94,12 @@ class ShellCanvas extends Component{
 
     return (             
         <div >
-         
-
           <br/>   
-          {temp}
-                 
+          {temp}                 
         </div>
     ) 
 
   }
-
 }
 
 export default ShellCanvas;
