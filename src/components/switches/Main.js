@@ -2,24 +2,27 @@ import React, { Component } from 'react';
 import Switch from '@material-ui/core/Switch';
 import { CircularProgress } from '@material-ui/core/CircularProgress';
 
+import {getInstance , updateInstance} from './api' ;
+
 
 class TSwitch extends Component{
 
   constructor(props){
-    super(props);
-    this.changeHandler = this.changeHandler.bind(this);  
-    this.getSwitch = this.getSwitch.bind(this);  
-
-
+    super(props); 
     this.state = {switchState:false , instanceName:"", busy:false};
+
+    //this.changeHandler = this.changeHandler.bind(this);  
+    //this.getSwitch = this.getSwitch.bind(this); 
   }
 
-	changeHandler(e,checked){
+	changeHandler = (e,checked) => {
+
+    console.log(e,checked)
     this.setSwitchState(checked);
 	}
 
   componentDidMount() {
-    this.state.switchState = this.getSwitch();
+    this.setState( {switchState : this.getSwitch() });
   }
 
   componentDidUpdate(prevProps, prevState){
@@ -83,49 +86,31 @@ class TSwitch extends Component{
   }
 
 
- getSwitch(){
-
-      var socketid = this.props.socket? this.props.socket.id : "";
-
-      var componentReference = this;  
-
-      componentReference.setState({busy:true})
-      
-      var google_token = componentReference.props.google_token;
-      var userId = componentReference.props.userId;
-      var instanceId = componentReference.props.item.instanceid;    
-      var url = "/switches/switch?access_token=" + google_token + "&userId=" + userId + "&instanceId=" +instanceId + "&socketid=" + socketid;  
-
-      fetch(url,{ credentials: 'include' }).then(function(response){
-        return response.json()
-      }).then(function(jsonData){
-
-          //console.log(jsonData)
-          componentReference.setState({busy:false})
-          if(jsonData.status ==="success"){            
-            componentReference.setState({switchState:jsonData.value.switchstate , instanceName:jsonData.value.instancename })
+ getSwitch = () => {    
+      //var socketid = this.props.socket? this.props.socket.id : "";
+      this.setState({busy:true});
+      getInstance(this.props.access_token,this.props.item.instanceid).then(
+        (res) => {        
+          this.setState({switchState:res.response.data.Item.switchstate,busy:false});
         }
-        else{
-          //show proper message
-        }
-      }).catch(function(err) {
-          componentReference.setState({busy:false})
-          //show proper message
-      })
-
+      );
   }
 
 
-  setSwitchState(state){
+  setSwitchState = (state) => {
 
-    var socketid = this.props.socket? this.props.socket.id : "";
+    //console.log(state)
 
-    var componentReference = this;  
-    componentReference.setState({busy:true})
 
-    var google_token = componentReference.props.google_token;
-    var userId = componentReference.props.userId;
-    var instanceId = componentReference.props.item.instanceid;
+
+    //var socketid = this.props.socket? this.props.socket.id : "";
+
+    //var componentReference = this;  
+    /*this.setState({busy:true})
+
+    var google_token = this.props.google_token;
+    var userId = this.props.userId;
+    var instanceId = this.props.item.instanceid;
 
     var url = "/switches/state";
     var params =  "access_token=" + google_token 
@@ -137,12 +122,12 @@ class TSwitch extends Component{
     var http = new XMLHttpRequest();
     http.open("POST", url, true);
     http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");  
-    http.onreadystatechange = function() {
+    http.onreadystatechange = () => {
 
-        componentReference.setState({busy:false})
+      this.setState({busy:false})
         if(http.readyState === 4 && http.status === 200) {
             var response = JSON.parse(http.response);
-            componentReference.setState({switchState:response.value });
+            this.setState({switchState:response.value });
             //console.log(response.value);            
         }
         else{            
@@ -150,6 +135,7 @@ class TSwitch extends Component{
     }
 
     http.send(params);
+    */
   }
 
   //Interface for all services
@@ -164,10 +150,6 @@ class TSwitch extends Component{
   updateInstance(){
     this.getSwitch();
   }
-
-
-
-
 
 }
 

@@ -12,9 +12,6 @@ class ShellCanvas extends Component{
 
 
   addInstance(item){
-
-    console.log("ITEMX =" ,item)
-
       var divStyle = {
         background: "transparent", 
         margin: "2px",
@@ -27,22 +24,22 @@ class ShellCanvas extends Component{
         boxShadow: "0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23)",
       }
 
-     
-
     import("../" + item.serviceid + "/Main").then( 
         Bar => {
           var XYZ = Bar.default;
           let yChildren = {...this.state.xChildren };
           yChildren[item.instanceid] =   (
             <div key={item.instanceid} style={divStyle}> 
+              
               <XYZ  
                   ref={(input) => {this[item.instanceid] = input }}
                   item = {item} 
-                  google_token = {this.props.google_token}
-                  userId = {this.props.userId}
-                  userName = {this.props.userName}
-                  socket = {this.props.socket}
-                  pushData = {this.state.pushData}/>
+                  userInfo = {this.props.userInfo }
+                  access_token = {this.props.access_token}
+                  // socket = {this.props.socket}
+                  // pushData = {this.state.pushData}
+                />
+
             </div> 
           );
           this.setState({xChildren:yChildren})

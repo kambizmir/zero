@@ -234,14 +234,14 @@ class Shell extends Component {
 
 
           <ShellCanvas 
-                        ref={x => { this.canvas = x; }}
-                        //google_token = {this.props.google_token}
-                        //userId = {this.props.userId}
-                        //userName = {this.props.googleProfile.name}
-                        //socket = {this.props.socket}
+                        ref={x => { this.canvas = x; }}                        
                         instanceToShow = {this.props.instanceToShowProp}
                         instanceToHide = {this.props.instanceToHideProp}
+                        userInfo = {this.props.userInfo }
+                        access_token = {this.props.access_token}
+                        //socket = {this.props.socket}
           />
+
 
           </div>      
 
