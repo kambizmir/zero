@@ -33,12 +33,10 @@ const NestedListItem = styled(ListItem)({
 class ShellDrawer extends Component {
 
   handleExpandClick = (item) => {
-    //console.log(item)
     this.props.drawerExpandChanged(item);    
   };
 
   handleSwitchClick = (item) =>{
-    //console.log("switch clicked", item)
     this.props.switchClicked(item);
   }
 
@@ -47,7 +45,6 @@ class ShellDrawer extends Component {
   };
 
   serviceClicked = (item) =>{
-    //console.log(item)
     this.props.serviceClicked(item);
   }
 
@@ -99,9 +96,6 @@ class ShellDrawer extends Component {
 
       </div>
     );
-
-
-
 
     return (
       <SwipeableDrawer    

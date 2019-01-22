@@ -10,9 +10,8 @@ export default class FormDialog extends React.Component {
   state = {
     idText : "",
     nameText : ""
-
   };
-
+  
   componentDidUpdate(prevProps, prevState, snapshot){
     if(this.props.open  && !prevProps.open){
       this.setState({idText : "",nameText : "" });

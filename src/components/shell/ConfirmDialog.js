@@ -11,7 +11,6 @@ class ConfirmDialog extends React.Component {
     open: false,
   };
 
-
   handleClose = () => {
     this.props.close();
   };

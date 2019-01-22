@@ -69,22 +69,19 @@ class Shell extends Component {
       return;
     }
 
-    //console.log(response)
     for(let i=0;i<response.response.Items.length;i++){
       response.response.Items[i]["visible"] = false;
     }
     this.props.updateStateWithInstances(response.response.Items);  
   }
 
-  instancesCreateCallback = (response) =>{
-    //console.log("INSTANCE CREATE RESPONSE:", response)
+  instancesCreateCallback = (response) =>{    
     if(response.status===0){
       getServices(this.props.access_token).then(this.servicesReceivedCallback);
       getInstances(this.props.access_token).then(this.instancesReceivedCallback);
       this.setState({createInstanceDialogOpen:false,itemBeingCreated:null});
     }
-    else{
-      //alert(response.message);
+    else{    
       toast(response.message, {
         position: toast.POSITION.TOP_CENTER,
         transition: Flip
@@ -92,16 +89,13 @@ class Shell extends Component {
     }
   }
 
-  instancesUpdateCallback = (response) =>{
-    //console.log("UPDATE RESPONS",response)
+  instancesUpdateCallback = (response) =>{    
     if(response.status===0){
       getServices(this.props.access_token).then(this.servicesReceivedCallback);
       getInstances(this.props.access_token).then(this.instancesReceivedCallback);
       this.setState({editInstanceDialogOpen:false,itemBeingEdited:null});
     }
     else{
-      //alert(response.message);
-      //toast(response.message);
       toast(response.message, {
         position: toast.POSITION.TOP_CENTER,
         transition: Flip
@@ -117,8 +111,6 @@ class Shell extends Component {
       this.setState({editInstanceDialogOpen:false,itemBeingEdited:null});
     }
     else{
-      //alert(response.message);
-      //toast(response.message);
       toast(response.message, {
         position: toast.POSITION.TOP_CENTER,
         transition: Flip
@@ -134,13 +126,6 @@ class Shell extends Component {
   instanceClicked = (item)=>{
     this.setState({editInstanceDialogOpen:true,
       itemBeingEdited:item});
-
-
-
-
-
-
-      //this.canvas.addInstance(item);
   }
 
   closeCreateInstance = () => {
@@ -152,12 +137,10 @@ class Shell extends Component {
   }
   
   createInstanceRequest = (service,id,name) =>{
-    //console.log("Requst to create instance " , service, id, name)
     createInstance(this.props.access_token,service,id,name).then(this.instancesCreateCallback);
   }
 
   updateInstanceRequest = (instance,name) =>{
-    //console.log("Request to update instance", instance,name)
     updateInstance(this.props.access_token,instance,name).then(this.instancesUpdateCallback);
   }
 
@@ -182,7 +165,6 @@ class Shell extends Component {
   }
 
   confirmDialogPositiveClick = (instance)=>{
-    //console.log("ITEM TO DELETE",instance)
     this.setState({confirmDialogOpen:false});
     this.deleteInstanceRequest(instance);
   }
@@ -193,9 +175,6 @@ class Shell extends Component {
 
 
   render() {
-
-    //console.log(this.state)
-
     return (
           <div>
             <ShellAppbar handleTopLeftMenuClick = {this.props.handleTopLeftMenuClick}/>
@@ -232,7 +211,6 @@ class Shell extends Component {
                          item = {this.state.confirmDialogItem}
           />                   
 
-
           <ShellCanvas 
                         ref={x => { this.canvas = x; }}                        
                         instanceToShow = {this.props.instanceToShowProp}
@@ -242,7 +220,6 @@ class Shell extends Component {
                         //socket = {this.props.socket}
           />
 
-
           </div>      
 
   
@@ -251,12 +228,7 @@ class Shell extends Component {
 
 }
 
-
 const combineLists = (servicesList,instancesList) =>{
-
-  //console.log("COMBINED ", servicesList,instancesList);
-
-
   for(let i = 0 ;i < servicesList.length;i++){
     servicesList[i].instances = [];
     for(let j=0;j<instancesList.length;j++){
@@ -264,34 +236,26 @@ const combineLists = (servicesList,instancesList) =>{
       if(instancesList[j].serviceid === servicesList[i].id){
         servicesList[i].instances.push(instancesList[j]);
       }
-
     } 
   }
-
-  
   return servicesList;
-
 }
 
 const mapStateToProps = (state,props) => {  
 
   console.log("STATE=",state)
-  //console.log("INSIDE mapStateToProps ",state,props)
 
   //CHECK IF STATE HAS CHANGED - HOW?
 
   return {lefMenuVisibleProp: state.shell.lefMenuVisible,
-          //servicesListProp:state.shell.servicesList,
-          
+          //servicesListProp:state.shell.servicesList,          
           combinedListsProp:combineLists(state.shell.servicesList , state.shell.instancesList),
           drawerExpandMapProp:state.shell.servicesExpandMap,
           drawerSwitchMapProp:state.shell.instancesVisbleMap,
 
           instanceToShowProp:state.shell.instanceToShow,
           instanceToHideProp:state.shell.instanceToHide,
-
          }
-
 };
 
 const mapDispatchToProps = dispatch => {    

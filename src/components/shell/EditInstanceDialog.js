@@ -17,7 +17,6 @@ export default class FormDialog extends React.Component {
     }
   }
 
-
   handleClose = () => {
     this.props.close();
   };
