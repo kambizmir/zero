@@ -18,14 +18,14 @@ export const getInstance = (access_token,instanceid) => {
 
 
 
-export const updateInstance = (access_token,instance) => {
-  let url = switchesUrl + "instance/=";
+export const updateInstance = (access_token,instance,state) => {
+  let url = switchesUrl + "instance/";
   return fetch(url, {
     method: "PUT",
     headers:{
       Authorization:"Bearer " + access_token
     },
-    body: JSON.stringify({instance:instance})
+    body: JSON.stringify({instance:instance  , switchstate:state})
     //credentials: "include"  //CORS
   }).then(res => res.json());
 };

@@ -10,14 +10,9 @@ class TSwitch extends Component{
   constructor(props){
     super(props); 
     this.state = {switchState:false , instanceName:"", busy:false};
-
-    //this.changeHandler = this.changeHandler.bind(this);  
-    //this.getSwitch = this.getSwitch.bind(this); 
   }
 
 	changeHandler = (e,checked) => {
-
-    console.log(e,checked)
     this.setSwitchState(checked);
 	}
 
@@ -71,7 +66,10 @@ class TSwitch extends Component{
             {this.props.item.instancename}
             <br/>
             <Switch onChange = {this.changeHandler} 
-            checked={this.state.switchState || false}/>            
+            
+               checked={this.state.switchState }
+            
+            />            
             {/* To avoid state of null*/}
 
             <br/>                          
@@ -85,57 +83,28 @@ class TSwitch extends Component{
 
   }
 
-
  getSwitch = () => {    
       //var socketid = this.props.socket? this.props.socket.id : "";
       this.setState({busy:true});
       getInstance(this.props.access_token,this.props.item.instanceid).then(
         (res) => {        
-          this.setState({switchState:res.response.data.Item.switchstate,busy:false});
+          this.setState({switchState:res.response.data.Item.switchstate,
+                         busy:false
+          });
         }
       );
   }
 
-
   setSwitchState = (state) => {
 
-    //console.log(state)
-
-
-
-    //var socketid = this.props.socket? this.props.socket.id : "";
-
-    //var componentReference = this;  
-    /*this.setState({busy:true})
-
-    var google_token = this.props.google_token;
-    var userId = this.props.userId;
-    var instanceId = this.props.item.instanceid;
-
-    var url = "/switches/state";
-    var params =  "access_token=" + google_token 
-                 +"&userId=" + userId 
-                 +"&instanceId=" + instanceId 
-                 +"&state=" + state
-                 +"&socketid=" + socketid; 
-
-    var http = new XMLHttpRequest();
-    http.open("POST", url, true);
-    http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");  
-    http.onreadystatechange = () => {
-
-      this.setState({busy:false})
-        if(http.readyState === 4 && http.status === 200) {
-            var response = JSON.parse(http.response);
-            this.setState({switchState:response.value });
-            //console.log(response.value);            
-        }
-        else{            
-        }
-    }
-
-    http.send(params);
-    */
+    this.setState({busy:true});
+    updateInstance(this.props.access_token,this.props.item,state).then(
+      (res) => {        
+        this.setState({switchState:res.response.switchstate,
+                       busy:false
+        });
+      }
+    );
   }
 
   //Interface for all services
