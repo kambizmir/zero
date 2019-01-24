@@ -1,6 +1,8 @@
 const servicesUrl = "https://qkv6phapx5.execute-api.us-west-2.amazonaws.com/zero/services/";
 const instancesUrl = "https://qkv6phapx5.execute-api.us-west-2.amazonaws.com/zero/instances/";
 
+const baseUrl = "https://qkv6phapx5.execute-api.us-west-2.amazonaws.com/zero/";
+
 
 export const getServices = (access_token) => {
     let url = servicesUrl
@@ -23,6 +25,19 @@ export const getInstances = (access_token) => {
     headers:{
       Authorization:"Bearer " + access_token
     }
+    //credentials: "include"  //CORS
+  }).then(res => res.json());
+};
+
+
+export const createInstanceDirect = (access_token,service,instanceid,instancename) => {
+  let url = baseUrl + service.id + "/instance/";
+  return fetch(url, {
+    method: "POST",
+    headers:{
+      Authorization:"Bearer " + access_token
+    },
+    body: JSON.stringify({service:service,instanceid:instanceid,instancename:instancename})
     //credentials: "include"  //CORS
   }).then(res => res.json());
 };
