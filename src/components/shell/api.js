@@ -42,20 +42,6 @@ export const createInstanceDirect = (access_token,service,instanceid,instancenam
   }).then(res => res.json());
 };
 
-
-export const createInstance = (access_token,service,instanceid,instancename) => {
-  let url = instancesUrl 
-  return fetch(url, {
-    method: "POST",
-    headers:{
-      Authorization:"Bearer " + access_token
-    },
-    body: JSON.stringify({service:service,instanceid:instanceid,instancename:instancename})
-    //credentials: "include"  //CORS
-  }).then(res => res.json());
-};
-
-
 export const updateInstance = (access_token,instance,instancename) => {
   let url = instancesUrl 
   return fetch(url, {
