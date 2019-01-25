@@ -13,7 +13,7 @@ import {topLeftMenuIconClick, leftMenuDismmiss ,updateServices,
         updateUserInfo, updateInstances, updateDrawerExpand,
         changeDrawerSwitchState} from "../../redux/shell/action.js";
 
-import {getServices , getInstances , createInstanceDirect, updateInstance, deleteInstance} from "./api.js"
+import {getServices , getInstances , createInstance, updateInstance, deleteInstance} from "./api.js"
 
 
 class Shell extends Component {
@@ -137,7 +137,7 @@ class Shell extends Component {
   }
   
   createInstanceRequest = (service,id,name) =>{
-    createInstanceDirect(this.props.access_token,service,id,name).then(this.instancesCreateCallback);
+    createInstance(this.props.access_token,service,id,name).then(this.instancesCreateCallback);
   }
 
   updateInstanceRequest = (instance,name) =>{

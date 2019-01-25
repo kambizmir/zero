@@ -30,7 +30,7 @@ export const getInstances = (access_token) => {
 };
 
 
-export const createInstanceDirect = (access_token,service,instanceid,instancename) => {
+export const createInstance = (access_token,service,instanceid,instancename) => {
   let url = baseUrl + service.id + "/instance/";
   return fetch(url, {
     method: "POST",
@@ -43,7 +43,10 @@ export const createInstanceDirect = (access_token,service,instanceid,instancenam
 };
 
 export const updateInstance = (access_token,instance,instancename) => {
-  let url = instancesUrl 
+
+console.log("here" ,access_token,instance,instancename )
+
+  let url = baseUrl + instance.serviceid + "/instance/"; 
   return fetch(url, {
     method: "PUT",
     headers:{
@@ -53,7 +56,6 @@ export const updateInstance = (access_token,instance,instancename) => {
     //credentials: "include"  //CORS
   }).then(res => res.json());
 };
-
 
 export const deleteInstance = (access_token,instance) => {
   let url = instancesUrl 
