@@ -58,7 +58,7 @@ console.log("here" ,access_token,instance,instancename )
 };
 
 export const deleteInstance = (access_token,instance) => {
-  let url = instancesUrl 
+  let url = baseUrl + instance.serviceid + "/instance/"; 
   return fetch(url, {
     method: "DELETE",
     headers:{
