@@ -19,9 +19,9 @@ export const getInstance = (access_token,instanceid) => {
 
 
 export const pushButton = (access_token,instance) => {
-  let url = switchesUrl + "instance/";
+  let url = switchesUrl + "push/";
   return fetch(url, {
-    method: "PUT",
+    method: "POST",
     headers:{
       Authorization:"Bearer " + access_token
     },
