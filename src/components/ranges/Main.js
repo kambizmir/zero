@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 //import { CircularProgress } from 'material-ui/Progress';
 
+import {getInstance, changeValue} from "./api";
+
 class PButton extends Component{
 
 
@@ -86,78 +88,98 @@ class PButton extends Component{
 
   getRange(){
 
-      var socketid = this.props.socket? this.props.socket.id : "";
 
-      var componentReference = this;  
 
-      componentReference.setState({busy:true})
+    this.setState({busy:true});
+    getInstance(this.props.access_token,this.props.item.instanceid).then(
+      (res) => {        
+
+        console.log("RANGE RES" , res)
+        this.setState({busy:false , value:res.response.data.Item.rangevalue , instanceName:res.response.data.Item.instancename
+        });
+      }
+    );
+      // var socketid = this.props.socket? this.props.socket.id : "";
+
+      // var componentReference = this;  
+
+      // componentReference.setState({busy:true})
       
-      var google_token = componentReference.props.google_token;
-      var userId = componentReference.props.userId;
-      var instanceId = componentReference.props.item.instanceid;    
-      var url = "/ranges/range?access_token=" + google_token + "&userId=" + userId + "&instanceId=" +instanceId + "&socketid=" + socketid;  
+      // var google_token = componentReference.props.google_token;
+      // var userId = componentReference.props.userId;
+      // var instanceId = componentReference.props.item.instanceid;    
+      // var url = "/ranges/range?access_token=" + google_token + "&userId=" + userId + "&instanceId=" +instanceId + "&socketid=" + socketid;  
 
-      fetch(url,{ credentials: 'include' }).then(function(response){
-        return response.json()
-      }).then(function(jsonData){
+      // fetch(url,{ credentials: 'include' }).then(function(response){
+      //   return response.json()
+      // }).then(function(jsonData){
 
-          //console.log(jsonData)
-          componentReference.setState({busy:false})
-          if(jsonData.status ==="success"){            
-            componentReference.setState({value:jsonData.value.rangevalue , instanceName:jsonData.value.instancename })
-        }
-        else{
-          //show proper message
-        }
-      }).catch(function(err) {
-          componentReference.setState({busy:false})
-          //show proper message
-      })
+      //     //console.log(jsonData)
+      //     componentReference.setState({busy:false})
+      //     if(jsonData.status ==="success"){            
+      //       componentReference.setState({value:jsonData.value.rangevalue , instanceName:jsonData.value.instancename })
+      //   }
+      //   else{
+      //     //show proper message
+      //   }
+      // }).catch(function(err) {
+      //     componentReference.setState({busy:false})
+      //     //show proper message
+      // })
 
   }
 
   setRangeValue(value){
 
-    var socketid = this.props.socket? this.props.socket.id : "";
+    this.setState({busy:true});
+    changeValue(this.props.access_token,this.props.item,value).then(
+      (res) => {        
+        this.setState({value:res.response.rangevalue,
+                       busy:false
+        });
+      }
+    );
 
-    var componentReference = this;  
+    // var socketid = this.props.socket? this.props.socket.id : "";
 
-    componentReference.setState({busy:true})
+    // var componentReference = this;  
 
-    var google_token = componentReference.props.google_token;
-    var userId = componentReference.props.userId;
-    var instanceId = componentReference.props.item.instanceid;
+    // componentReference.setState({busy:true})
 
-    var url = "/ranges/value";
-    var params =  "access_token=" + google_token 
-                 +"&userId=" + userId 
-                 +"&instanceId=" + instanceId 
-                 +"&value=" + value
-                 +"&socketid=" + socketid; 
+    // var google_token = componentReference.props.google_token;
+    // var userId = componentReference.props.userId;
+    // var instanceId = componentReference.props.item.instanceid;
+
+    // var url = "/ranges/value";
+    // var params =  "access_token=" + google_token 
+    //              +"&userId=" + userId 
+    //              +"&instanceId=" + instanceId 
+    //              +"&value=" + value
+    //              +"&socketid=" + socketid; 
 
 
-    var http = new XMLHttpRequest();
+    // var http = new XMLHttpRequest();
 
-    http.open("POST", url, true);
+    // http.open("POST", url, true);
 
-    http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");  
+    // http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");  
 
-    http.onreadystatechange = function() {
+    // http.onreadystatechange = function() {
 
-        componentReference.setState({busy:false})
+    //     componentReference.setState({busy:false})
 
-        if(http.readyState === 4 && http.status === 200) {
+    //     if(http.readyState === 4 && http.status === 200) {
 
-            var response = JSON.parse(http.response);
+    //         var response = JSON.parse(http.response);
 
-            componentReference.setState({value:response.value });
-            //console.log(response.value);            
-        }
-        else{            
-        }
-    }
+    //         componentReference.setState({value:response.value });
+    //         //console.log(response.value);            
+    //     }
+    //     else{            
+    //     }
+    // }
 
-    http.send(params);
+    // http.send(params);
   }
 
 
